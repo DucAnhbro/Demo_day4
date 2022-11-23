@@ -8,7 +8,7 @@ namespace Demo_day4
 {
     internal class Animal
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Ten { get; set; }
         public double Chieu_cao { get; set; }
         public double Can_nang { get; set; }
@@ -18,7 +18,7 @@ namespace Demo_day4
         {
         }
 
-        public Animal(string id, string ten,double chieu_cao, double can_nang, string mau_sac)
+        public Animal(int id, string ten,double chieu_cao, double can_nang, string mau_sac)
         {
             Id = id;
             Ten = ten;

@@ -9,124 +9,64 @@ namespace Demo_day4
     internal class Manager
     {
         Validation va = new Validation();
-        public void CreateAnimal(List<Animal> animals)
-        {
-            bool check = false;
-            while (!check)
-            {
-                Console.WriteLine("Nhap vao Id:");
-                string id = va.CheckString("Nhap vao Id:");
-                if(id == null)
-                {
-                    id= Console.ReadLine();
-                }
-                Console.WriteLine("Nhap vao ten dong vat");
-                string ten = va.CheckTen();
-                if(ten == null)
-                {
-                    ten = Console.ReadLine();
-                }
-                else
-                {
-                    Console.WriteLine("Ten da ton tai, yeu cau nhap dung fomat");
-                    
-                }
-                double chieu_cao = va.CheckDouble("Nhap vao chieu cao:");
-                double can_nang = va.CheckDouble("Nhap vao can nang:");
-                string mau_sac = va.CheckString("Nhap vao mau sac:");
-                if(va.CheckAnimaleExit(id, ten, chieu_cao, can_nang, mau_sac, animals).Equals(""))
-                {
-                    animals.Add(new Animal(id, ten, chieu_cao, can_nang,mau_sac));
-                    Console.WriteLine("Add success full");
-                }
-                check= true;
-            }
-            check = false;
-            Console.WriteLine("Add fail");
-        }
-        public void UpdateAnimal(List<Animal> animals)
-        {
-            string id = va.CheckString("Nhap vao Id:");
-            if(id == null)
-            {
-                Console.WriteLine(" Id khong ton tai");
-            }
-            else
-            {
-                string ten = "";
-                double chieu_cao = va.CheckDouble("Nhap vao chieu cao:");
-                double can_nang = va.CheckDouble("Nhap vao can nang:");
-                string mau_sac = va.CheckString("Nhap vao mau sac:");
-                foreach (Animal an in animals)
-                {
-                    if (id.Equals(an.Id))
-                    {
-                        an.Ten=ten;
-                        an.Chieu_cao = chieu_cao;
-                        an.Can_nang = can_nang;
-                        an.Mau_sac = mau_sac;
-                    }else if(va.CheckAnimaleExit(id, ten, chieu_cao, can_nang, mau_sac, animals))
-                    {
-                        animals.Add(new Animal(id, ten, chieu_cao, can_nang, mau_sac));
-                    }
-                    else
-                    {
-                        Console.WriteLine("Animal da ton tai");
-                    }
-                }
-            }
 
+        private List<Animal> listA = null;
+        Animal animal = new Animal();
+
+        public Manager()
+        {
+            listA = new List<Animal>();
         }
 
-        public void GetAnimalById(List<Animal> animals, string id)
+        public List<Animal> GetListAnimal()
         {
-            foreach(Animal an in animals)
-            {
-                if (id.Equals(an.Id))
-                {
-                    animals.Add(an);
-                } 
-            }
+            return listA;
         }
-        public void RemoveAnimal(List<Animal> animals, string id)
+
+        private int GenerateID()
         {
-            var check = false;
-                foreach (var o in animals.ToList())
+            int max = 1;
+            if (listA != null && listA.Count > 0)
+            {
+                max = listA[0].Id;
+                foreach (var o in listA)
                 {
-                    if (o.Id == id)
+                    if (max < o.Id)
                     {
-                        animals.Remove(o);
-                        Console.WriteLine("Da xoa thanh cong");
-                        check = false;
+                        max = o.Id;
                     }
-                    if(o.Id != id)
-                    {
-                        Console.WriteLine("Khong ton tai Animal");
-                    }
-                
                 }
+                max++;
+            }
+            return max;
+        }
+        public int NumberAnimal()
+        {
+            int Count = 0;
+            if (listA != null)
+            {
+                Count = listA.Count;
+            }
+            return Count;
+        }
+        public void CreateAnimal()
+        {
             
-        }
+            Animal animal = new Animal();
+            animal.Id = GenerateID();
+            Console.Write("Nhap ten dong vat: ");
+            animal.Ten = Console.ReadLine();
 
-        
+            Console.Write("Nhap Chieu cao: ");
+            animal.Chieu_cao = Convert.ToDouble(Console.ReadLine());
 
-        public void GetAnimalById(string id, List<Animal> animals)
-        {
-            var an = new Animal();
-            foreach (var o in animals)
-            {
-                if (o.Id == id)
-                {
-                    an.Ten = o.Ten;
-                    an.Chieu_cao = o.Chieu_cao;
-                    an.Can_nang = o.Can_nang;
-                    an.Mau_sac = o.Mau_sac;
-                }
-                else
-                {
-                    Console.WriteLine("khong ton tai animal co Id nay");
-                }
-            }
+            Console.Write("Nhap Can nang: ");
+            animal.Can_nang = Convert.ToDouble(Console.ReadLine());
+
+            Console.Write("Nhap mau sac: ");
+            animal.Mau_sac= Console.ReadLine();
+
+            listA.Add(animal);
         }
         public void ShowAnimal(List<Animal> animals)
         {
@@ -141,6 +81,71 @@ namespace Demo_day4
                 }
             }
             Console.WriteLine();
+        }
+
+        public Animal FindByID(int id)
+        {
+            Animal searchResult = null;
+            if (listA != null && listA.Count > 0)
+            {
+                foreach (var o in listA)
+                {
+                    if (o.Id == id)
+                    {
+                        searchResult = o;
+                    }
+                }
+            }
+            return searchResult;
+        }
+        public void UpdateAnimal(int id)
+        {
+            Animal animal = FindByID(id);
+            if ( animal != null)
+            {
+                Console.Write("Nhap ten sinh vien: ");
+                string name = Convert.ToString(Console.ReadLine());
+                if (name != null && name.Length > 0)
+                {
+                    animal .Ten = name;
+                }
+
+                Console.Write("Nhap Chieu cao: ");
+                string chieu_cao = Convert.ToString(Console.ReadLine());
+                if (chieu_cao != null && chieu_cao.Length > 0)
+                {
+                    animal.Chieu_cao = Convert.ToDouble(chieu_cao);
+                }
+
+                Console.Write("Nhap Can nang: ");
+                string can_nang = Convert.ToString(Console.ReadLine());
+                if (chieu_cao != null && chieu_cao.Length > 0)
+                {
+                    animal.Chieu_cao = Convert.ToDouble(can_nang);
+                }
+
+                Console.Write("Nhap Mau sac: ");
+                string mau_sac = Convert.ToString(Console.ReadLine());
+                if (mau_sac != null && mau_sac.Length > 0)
+                {
+                    animal.Ten = mau_sac;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Sinh vien co ID = {0} khong ton tai.", id);
+            }
+        }
+        public bool DeleteById(int id)
+        {
+            bool IsDeleted = false;
+            // tìm kiếm sinh viên theo ID
+            Animal animal = FindByID(id);
+            if (animal != null)
+            {
+                IsDeleted = listA.Remove(animal);
+            }
+            return IsDeleted;
         }
     }
 }
